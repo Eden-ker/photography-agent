@@ -14,6 +14,14 @@ BLUR_THRESHOLD = 100.0  # Laplacian variance threshold
 BRIGHTNESS_LOW_THRESHOLD = 50
 BRIGHTNESS_HIGH_THRESHOLD = 200
 
+# Guidance Thresholds
+GUIDANCE = {
+    "center_x_min": 0.40,
+    "center_x_max": 0.60,
+    "size_min": 0.10,
+    "size_max": 0.40
+}
+
 # UI Settings
 UI_FONT_SCALE = 0.6
 UI_THICKNESS = 1

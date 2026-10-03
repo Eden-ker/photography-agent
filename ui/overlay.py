@@ -7,9 +7,9 @@ class DebugUI:
     def __init__(self):
         self.font = cv2.FONT_HERSHEY_SIMPLEX
         
-    def draw(self, frame: np.ndarray, state: SceneState) -> np.ndarray:
+    def draw(self, frame: np.ndarray, state: SceneState, guidance_state=None, active_task=None) -> np.ndarray:
         """
-        Draw debug information on the frame based on the SceneState.
+        Draw debug information on the frame based on the SceneState and Guidance layer.
         """
         output_frame = frame.copy()
         h, w = output_frame.shape[:2]
@@ -50,5 +50,19 @@ class DebugUI:
             color = (0, 255, 255) if "WARNING" in metric else (255, 255, 255)
             cv2.putText(output_frame, metric, (w - 300, y_offset), self.font, UI_FONT_SCALE, color, UI_THICKNESS)
             y_offset += 25
+            
+        # Draw Guidance Task
+        if guidance_state:
+            state_name = guidance_state.name
+            cv2.putText(output_frame, f"State: {state_name}", (20, h - 60), self.font, UI_FONT_SCALE, (200, 200, 200), UI_THICKNESS)
+            
+        if active_task:
+            if guidance_state and guidance_state.name == "COMPLETED":
+                text = f"SUCCESS: {active_task.action} Done!"
+                color = (0, 255, 0)
+            else:
+                text = f"RECOMMENDATION: {active_task.action}"
+                color = (0, 165, 255) # Orange
+            cv2.putText(output_frame, text, (20, h - 20), self.font, UI_FONT_SCALE * 1.2, color, UI_THICKNESS + 1)
             
         return output_frame

@@ -4,6 +4,7 @@ from perception.camera import Camera
 from perception.tracker import SubjectTracker
 from perception.visual import calculate_blur, calculate_brightness, detect_backlight, calculate_motion
 from perception.state_builder import StateBuilder
+from controller.guidance import GuidanceController
 from ui.overlay import DebugUI
 from core.config import CAMERA_INDEX
 
@@ -24,6 +25,7 @@ def main():
         return
         
     state_builder = StateBuilder()
+    controller = GuidanceController()
     ui = DebugUI()
     
     # Timing and frame skipping for 15 FPS perception on a 30 FPS camera feed
@@ -72,8 +74,11 @@ def main():
             current_state = state_builder.update(tracker_data, visual_data, timestamp)
             prev_frame = frame.copy()
             
+            # 5. Evaluate Guidance
+            controller.evaluate(current_state)
+            
         # Draw UI (runs every frame to keep video feed smooth)
-        display_frame = ui.draw(frame, current_state)
+        display_frame = ui.draw(frame, current_state, guidance_state=controller.state, active_task=controller.active_task)
         
         cv2.imshow("Photography Agent - Debug UI", display_frame)
         
