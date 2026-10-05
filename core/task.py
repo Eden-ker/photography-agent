@@ -1,15 +1,13 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Literal
+from typing import Optional
 
-class CompletionCondition(BaseModel):
-    field: str = Field(..., description="The SceneState field to monitor (e.g., 'subject_center_x')")
-    operator: Literal["in_range", "<", ">"] = Field(default="in_range", description="Comparison operator")
-    target: float = Field(..., description="The target value")
-    tolerance: float = Field(default=0.0, description="Acceptable +/- deviation from target (for in_range)")
+class Range(BaseModel):
+    min_val: float = Field(..., description="Minimum acceptable value")
+    max_val: float = Field(..., description="Maximum acceptable value")
 
-class Task(BaseModel):
-    action: str = Field(..., description="The action/instruction text, e.g. 'MOVE_LEFT'")
-    priority: float = Field(default=1.0, description="Priority of the task [0.0, 1.0]")
-    confidence: float = Field(default=1.0, description="Confidence in the recommendation [0.0, 1.0]")
-    reason: str = Field(..., description="Reasoning for this recommendation")
-    completion_condition: Optional[CompletionCondition] = Field(None, description="Condition to mark the task completed")
+class CompositionTarget(BaseModel):
+    reasoning: str = Field(..., description="Brief photographic reasoning for why this composition was chosen (e.g., 'Subject is facing right, so placing them on the left third leaves looking room').")
+    subject_center_x: Range = Field(..., description="Target range for subject center X coordinate (0.0 to 1.0, e.g., 0.33 for left third)")
+    face_center_y: Range = Field(..., description="Target range for face/eyes Y coordinate (0.0 to 1.0, e.g., 0.33 for top third)")
+    subject_height_ratio: Range = Field(..., description="Target range for subject bounding box height relative to frame (0.0 to 1.0)")
+    message: str = Field(..., description="User-facing message explaining the composition")

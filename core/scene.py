@@ -12,12 +12,14 @@ class SceneState(BaseModel):
     subjects_count: int = Field(default=0, description="Number of subjects detected")
     subject_center_x: Optional[float] = Field(default=None, description="Normalized X coordinate of the subject center")
     subject_center_y: Optional[float] = Field(default=None, description="Normalized Y coordinate of the subject center")
-    subject_size_ratio: Optional[float] = Field(default=None, description="Ratio of the subject bounding box area to frame area")
+    subject_height_ratio: Optional[float] = Field(default=None, description="Ratio of the subject bounding box height to frame height")
+    subject_width_ratio: Optional[float] = Field(default=None, description="Ratio of the subject bounding box width to frame width")
     
     # Face tracking
     face_detected: bool = Field(default=False, description="Whether a face was clearly detected")
     face_center_x: Optional[float] = Field(default=None, description="Normalized X coordinate of the face")
     face_center_y: Optional[float] = Field(default=None, description="Normalized Y coordinate of the face")
+    face_bbox: Optional[tuple] = Field(default=None, description="(min_x, min_y, width, height) normalized coordinates")
     
     # Scene Metrics
     camera_tilt_degrees: Optional[float] = Field(default=None, description="Estimated camera tilt (horizon) in degrees")

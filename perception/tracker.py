@@ -108,7 +108,8 @@ class SubjectTracker:
             "subjects_count": 0,
             "subject_center_x": None,
             "subject_center_y": None,
-            "subject_size_ratio": None,
+            "subject_height_ratio": None,
+            "subject_width_ratio": None,
             "pose_confidence": 0.0,
             "face_detected": False,
             "face_center_x": None,
@@ -136,7 +137,8 @@ class SubjectTracker:
                 
                 results["subject_center_x"] = (min_x + max_x) / 2.0
                 results["subject_center_y"] = (min_y + max_y) / 2.0
-                results["subject_size_ratio"] = (max_x - min_x) * (max_y - min_y)
+                results["subject_height_ratio"] = (max_y - min_y)
+                results["subject_width_ratio"] = (max_x - min_x)
                 
                 results["pose_confidence"] = sum(getattr(lm, 'visibility', 1.0) for lm in visible_landmarks) / len(visible_landmarks)
                 
@@ -179,7 +181,8 @@ class SubjectTracker:
                 results["subjects_count"] = 1
                 results["subject_center_x"] = results["face_center_x"]
                 results["subject_center_y"] = results["face_center_y"]
-                results["subject_size_ratio"] = (max_x - min_x) * (max_y - min_y)
+                results["subject_height_ratio"] = (max_y - min_y)
+                results["subject_width_ratio"] = (max_x - min_x)
                 
         return results
 

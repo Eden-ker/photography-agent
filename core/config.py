@@ -22,6 +22,11 @@ GUIDANCE = {
     "size_max": 0.40
 }
 
+# LLM Agent Settings
+OLLAMA_API_URL = "http://localhost:11434/api/generate"
+OLLAMA_MODEL = "qwen2.5:1.5b" # common ollama tag
+LLM_TIMEOUT_SECONDS = 15.0
+
 # UI Settings
 UI_FONT_SCALE = 0.6
 UI_THICKNESS = 1

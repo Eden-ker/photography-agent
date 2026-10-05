@@ -35,3 +35,10 @@ env/
 # Project specific
 models/
 *.log
+
+# Temporary and scratch files
+scratch/
+.env
+*.jpg
+*.png
+*.json

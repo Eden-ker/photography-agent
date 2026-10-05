@@ -30,15 +30,19 @@ class StateBuilder:
         if sub_count == 0:
             cx = None
             cy = None
-            sz = None
+            sh = None
+            sw = None
             fx = None
             fy = None
+            fb = None
         else:
             cx = self._ema(self.current_state.subject_center_x, tracker_data.get("subject_center_x"), EMA_ALPHA_FAST)
             cy = self._ema(self.current_state.subject_center_y, tracker_data.get("subject_center_y"), EMA_ALPHA_FAST)
-            sz = self._ema(self.current_state.subject_size_ratio, tracker_data.get("subject_size_ratio"), EMA_ALPHA_FAST)
+            sh = self._ema(self.current_state.subject_height_ratio, tracker_data.get("subject_height_ratio"), EMA_ALPHA_FAST)
+            sw = self._ema(self.current_state.subject_width_ratio, tracker_data.get("subject_width_ratio"), EMA_ALPHA_FAST)
             fx = self._ema(self.current_state.face_center_x, tracker_data.get("face_center_x"), EMA_ALPHA_FAST)
             fy = self._ema(self.current_state.face_center_y, tracker_data.get("face_center_y"), EMA_ALPHA_FAST)
+            fb = tracker_data.get("face_bbox") if face_detected else None
             
         # 2. Update slow-changing metrics
         blur = self._ema(self.current_state.blur_level, visual_data.get("blur_level"), EMA_ALPHA_SLOW)
@@ -55,10 +59,12 @@ class StateBuilder:
             subjects_count=sub_count,
             subject_center_x=cx,
             subject_center_y=cy,
-            subject_size_ratio=sz,
+            subject_height_ratio=sh,
+            subject_width_ratio=sw,
             face_detected=face_detected,
             face_center_x=fx,
             face_center_y=fy,
+            face_bbox=fb,
             camera_tilt_degrees=tilt,
             tilt_confidence=tracker_data.get("tilt_confidence", 0.0),
             brightness=bright or 0.0,
