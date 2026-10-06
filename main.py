@@ -82,6 +82,12 @@ def main():
             target=controller.target
         )
         
+        # Add 1px boundary around camera
+        display_frame = cv2.copyMakeBorder(display_frame, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=(80, 80, 85))
+        
+        # Add universal inset margin
+        display_frame = cv2.copyMakeBorder(display_frame, 16, 16, 16, 16, cv2.BORDER_CONSTANT, value=(24, 24, 26))
+
         # Pad frame to match window aspect ratio to prevent stretching
         try:
             win_rect = cv2.getWindowImageRect("Photography Agent - MVP")
@@ -99,14 +105,18 @@ def main():
                         pad = new_w - f_w
                         left = pad // 2
                         right = pad - left
-                        display_frame = cv2.copyMakeBorder(display_frame, 0, 0, left, right, cv2.BORDER_CONSTANT, value=(0,0,0))
+                        display_frame = cv2.copyMakeBorder(display_frame, 0, 0, left, right, cv2.BORDER_CONSTANT, value=(24, 24, 26))
                     else:
                         # Window is taller: letterbox
                         new_h = int(f_w / target_ratio)
                         pad = new_h - f_h
                         top = pad // 2
                         bottom = pad - top
-                        display_frame = cv2.copyMakeBorder(display_frame, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=(0,0,0))
+                        display_frame = cv2.copyMakeBorder(display_frame, top, bottom, 0, 0, cv2.BORDER_CONSTANT, value=(24, 24, 26))
+                        
+            # Outer subtle border around entire application
+            final_h, final_w = display_frame.shape[:2]
+            cv2.rectangle(display_frame, (0, 0), (final_w - 1, final_h - 1), (45, 45, 48), 1)
         except Exception:
             pass
 
